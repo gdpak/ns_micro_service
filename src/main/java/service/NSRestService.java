@@ -41,7 +41,7 @@ public class NSRestService {
 			throw new BadRequestException();
 		VirtualLinkManager.add(vl);
 		URI uri = uriInfo.getAbsolutePathBuilder()
-				.path(String.valueOf(vl.getId()))
+				.path(String.valueOf(vl.getName()))
 				.build();
 		return Response.created(uri).build();
 	}
@@ -53,8 +53,8 @@ public class NSRestService {
 	 */
 	@GET
 	@Path("/vl/{name}")
-	public Response get(@PathParam("name") int id, @QueryParam("type") String type) {
-		VirtualLink vl = VirtualLinkManager.find(id);
+	public Response get(@PathParam("name") String name, @QueryParam("type") String type) {
+		VirtualLink vl = VirtualLinkManager.find(name);
 		if (vl == null)
 			throw new NotFoundException();
 		return Response
@@ -73,7 +73,7 @@ public class NSRestService {
 			throw new BadRequestException();
 		VirtualLinkManager.update(vl);
 		URI uri = uriInfo.getAbsolutePathBuilder()
-				.path(String.valueOf(vl.getId()))
+				.path(String.valueOf(vl.getName()))
 				.build();
 		return Response.created(uri).build();
 	}
@@ -83,12 +83,12 @@ public class NSRestService {
 	 */
 	@DELETE
 	@Path("/vl/{name}")
-	public Response delete(@PathParam("name") int id, @QueryParam("type") String type) {
-		VirtualLink vl = VirtualLinkManager.find(id);
+	public Response delete(@PathParam("name") String name, @QueryParam("type") String type) {
+		VirtualLink vl = VirtualLinkManager.find(name);
 		if (vl == null) {
 			throw new NotFoundException();
 		}
-		VirtualLinkManager.delete(id);
+		VirtualLinkManager.delete(name);
 		return Response.noContent().build();
 	}
 }

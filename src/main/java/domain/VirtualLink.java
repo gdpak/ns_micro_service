@@ -1,63 +1,107 @@
 package domain;
 
 import java.util.Date;
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /*
  * Data Holder for VL
  * @author Deepak Agrawal
  */
+
 @XmlRootElement
 public class VirtualLink {
-	int id;
-	String subnet_assigned;
-	String ip_profile;
+	String name;
+	int type;
+	int tenant_vlan;
+	int ip_version;
+	String ip_cidr;
+	int segment_id;
+	int dhcp_enabled;
+	// Auto-generated or indirectly retrieved
 	int cloud_tenant_id;
-	int ns_id;
-	int state;
-	int prev_state;
+	String uuid;
 	Date time_created;
 	
 	public VirtualLink() {
 		//super();
 		// TODO Auto-generated constructor stub
+		this.cloud_tenant_id =0;
+		this.uuid = UUID.randomUUID().toString();
+		this.time_created = new Date();
 	}
-	
-	public VirtualLink(int id, String subnet_assigned, String ip_profile, int cloud_tenant_id, int ns_id,
-			int state, int prev_state, Date time_created) {
+
+	public VirtualLink(String name, int type, int tenant_vlan, int ip_version, String ip_cidr, int segment_id,
+			int dhcp_enabled) {
 		super();
-		this.id = id;
-		this.subnet_assigned = subnet_assigned;
-		this.ip_profile = ip_profile;
-		this.cloud_tenant_id = cloud_tenant_id;
-		this.ns_id = ns_id;
-		this.state = state;
-		this.prev_state = prev_state;
-		this.time_created = time_created;
+		this.name = name;
+		this.type = type;
+		this.tenant_vlan = tenant_vlan;
+		this.ip_version = ip_version;
+		this.ip_cidr = ip_cidr;
+		this.segment_id = segment_id;
+		this.dhcp_enabled = dhcp_enabled;
+		// this.cloud_tenant_id = cloud_tenant_id; // need to see how to retrieve this
+		this.cloud_tenant_id = 0;
+		this.uuid = UUID.randomUUID().toString();
+		this.time_created = new Date();
 	}
 
-	public int getId() {
-		return id;
+	public String getName() {
+		return name;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getSubnet_assigned() {
-		return subnet_assigned;
+	public int getType() {
+		return type;
 	}
 
-	public void setSubnet_assigned(String subnet_assigned) {
-		this.subnet_assigned = subnet_assigned;
+	public void setType(int type) {
+		this.type = type;
 	}
 
-	public String getIp_profile() {
-		return ip_profile;
+	public int getTenant_vlan() {
+		return tenant_vlan;
 	}
 
-	public void setIp_profile(String ip_profile) {
-		this.ip_profile = ip_profile;
+	public void setTenant_vlan(int tenant_vlan) {
+		this.tenant_vlan = tenant_vlan;
+	}
+
+	public int getIp_version() {
+		return ip_version;
+	}
+
+	public void setIp_version(int ip_version) {
+		this.ip_version = ip_version;
+	}
+
+	public String getIp_cidr() {
+		return ip_cidr;
+	}
+
+	public void setIp_cidr(String ip_cidr) {
+		this.ip_cidr = ip_cidr;
+	}
+
+	public int getSegment_id() {
+		return segment_id;
+	}
+
+	public void setSegment_id(int segment_id) {
+		this.segment_id = segment_id;
+	}
+
+	public int isDhcp_enabled() {
+		return dhcp_enabled;
+	}
+
+	public void setDhcp_enabled(int dhcp_enabled) {
+		this.dhcp_enabled = dhcp_enabled;
 	}
 
 	public int getCloud_tenant_id() {
@@ -67,29 +111,12 @@ public class VirtualLink {
 	public void setCloud_tenant_id(int cloud_tenant_id) {
 		this.cloud_tenant_id = cloud_tenant_id;
 	}
-
-	public int getNs_id() {
-		return ns_id;
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setNs_id(int ns_id) {
-		this.ns_id = ns_id;
-	}
-
-	public int getState() {
-		return state;
-	}
-
-	public void setState(int state) {
-		this.state = state;
-	}
-
-	public int getPrev_state() {
-		return prev_state;
-	}
-
-	public void setPrev_state(int prev_state) {
-		this.prev_state = prev_state;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public Date getTime_created() {
@@ -99,5 +126,4 @@ public class VirtualLink {
 	public void setTime_created(Date time_created) {
 		this.time_created = time_created;
 	}
-	
 }
