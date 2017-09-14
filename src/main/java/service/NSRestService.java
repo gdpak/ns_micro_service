@@ -41,7 +41,7 @@ public class NSRestService {
 			throw new BadRequestException();
 		VirtualLinkManager.add(vl);
 		URI uri = uriInfo.getAbsolutePathBuilder()
-				.path(String.valueOf(vl.getName()))
+				.path(vl.getName())
 				.build();
 		return Response.created(uri).build();
 	}
