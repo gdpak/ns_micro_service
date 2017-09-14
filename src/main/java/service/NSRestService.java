@@ -18,6 +18,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import domain.ConnectionPoint;
+import domain.ConnectionPointManager;
 import domain.VirtualLink;
 import domain.VirtualLinkManager;
 
@@ -91,4 +93,16 @@ public class NSRestService {
 		VirtualLinkManager.delete(name);
 		return Response.noContent().build();
 	}
+	
+	@GET
+	@Path("/cp/{name}")
+	public Response get_cp(@PathParam("name") String name, @QueryParam("type") String type) {
+		ConnectionPoint cp = ConnectionPointManager.find(name);
+		if (cp == null)
+			throw new NotFoundException();
+		return Response
+				.ok(cp, "xml".equals(type) ? MediaType.APPLICATION_XML :MediaType.APPLICATION_JSON )
+				.build();
+	}
+	
 }
