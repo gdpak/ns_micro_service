@@ -94,6 +94,24 @@ public class NSRestService {
 		return Response.noContent().build();
 	}
 	
+	/*
+	 * Create a CP 
+	 */
+	@POST
+	@Path("cp")
+	public Response create_cp(ConnectionPoint cp) {
+		if (cp == null)
+			throw new BadRequestException();
+		ConnectionPointManager.add(cp);
+		URI uri = uriInfo.getAbsolutePathBuilder()
+				.path(cp.getName())
+				.build();
+		return Response.created(uri).build();
+	}
+	
+	/*
+	 * @GET - Get a CP by its name
+	 */
 	@GET
 	@Path("/cp/{name}")
 	public Response get_cp(@PathParam("name") String name, @QueryParam("type") String type) {
@@ -103,6 +121,35 @@ public class NSRestService {
 		return Response
 				.ok(cp, "xml".equals(type) ? MediaType.APPLICATION_XML :MediaType.APPLICATION_JSON )
 				.build();
+	}
+	/*
+	 * Update a cp
+	 * @param new Cp
+	 */
+	@PUT
+	@Path("cp")
+	public Response update_cp(ConnectionPoint cp) {
+		if (cp == null)
+			throw new BadRequestException();
+		ConnectionPointManager.update(cp);
+		URI uri = uriInfo.getAbsolutePathBuilder()
+				.path(String.valueOf(cp.getName()))
+				.build();
+		return Response.created(uri).build();
+	}
+	
+	/*
+	 * Delete a cp
+	 */
+	@DELETE
+	@Path("/cp/{name}")
+	public Response delete_cp(@PathParam("name") String name, @QueryParam("type") String type) {
+		ConnectionPoint cp = ConnectionPointManager.find(name);
+		if (cp == null) {
+			throw new NotFoundException();
+		}
+		ConnectionPointManager.delete(name);
+		return Response.noContent().build();
 	}
 	
 }
