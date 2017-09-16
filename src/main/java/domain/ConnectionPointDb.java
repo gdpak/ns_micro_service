@@ -15,7 +15,15 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 @XmlSeeAlso(ConnectionPoint.class)
 public class ConnectionPointDb {
 	GraphDatabaseFactory dbFactory = new GraphDatabaseFactory();
-	GraphDatabaseService dbService = dbFactory.newEmbeddedDatabaseBuilder(new File("data/neo4j.db")).newGraphDatabase();
+	static GraphDatabaseService dbService = null;
+	
+	public void init() {
+		dbService = dbFactory.newEmbeddedDatabaseBuilder(new File("data/neo4j.db")).newGraphDatabase();
+	}
+	
+	public void close() {
+		dbService.shutdown();
+	}
 	
 	public void add(ConnectionPoint cp) {
 		try (Transaction tx = dbService.beginTx())	//create Neo4j transaction
@@ -61,4 +69,5 @@ public class ConnectionPointDb {
 		}
 		return cp;
 	}
+	
 }

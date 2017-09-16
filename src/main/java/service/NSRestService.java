@@ -20,6 +20,8 @@ import javax.ws.rs.core.UriInfo;
 
 import domain.ConnectionPoint;
 import domain.ConnectionPointManager;
+import domain.NetConnection;
+import domain.NetConnectionManager;
 import domain.VirtualLink;
 import domain.VirtualLinkManager;
 
@@ -30,8 +32,11 @@ public class NSRestService {
 	@Context
 	private UriInfo uriInfo;
 	/*
-	 * CRUD on VL
+	 **************************************
+	 * VL REST API HANDLERS
+	 **************************************
 	 */
+	
 	/*
 	 * Create a VL
 	 * @param VL 
@@ -93,6 +98,10 @@ public class NSRestService {
 		VirtualLinkManager.delete(name);
 		return Response.noContent().build();
 	}
+	/***************************************
+	 *   ConnectionPoint REST API Handler
+	 ***************************************
+	 */
 	
 	/*
 	 * Create a CP 
@@ -150,6 +159,86 @@ public class NSRestService {
 		}
 		ConnectionPointManager.delete(name);
 		return Response.noContent().build();
+	}
+	
+	/******************************************
+	 * Network Connection REST API Handler
+	 * ****************************************
+	 * @param nc
+	 * @return
+	 */
+	/*
+	 * Create a NC 
+	 */
+	@POST
+	@Path("nc")
+	public Response create_nc(NetConnection nc) {
+		if (nc == null)
+			throw new BadRequestException();
+		NetConnectionManager.add(nc);
+		URI uri = uriInfo.getAbsolutePathBuilder()
+				.path(nc.getName())
+				.build();
+		return Response.created(uri).build();
+	}
+	
+	/*
+	 * @GET - Get a NC by its name
+	 */
+	@GET
+	@Path("/nc/{name}")
+	public Response get_nc(@PathParam("name") String name, @QueryParam("type") String type) {
+		NetConnection nc = NetConnectionManager.find(name);
+		if (nc == null)
+			throw new NotFoundException();
+		return Response
+				.ok(nc, "xml".equals(type) ? MediaType.APPLICATION_XML :MediaType.APPLICATION_JSON )
+				.build();
+	}
+	/*
+	 * Update a NC
+	 * @param new NC
+	 */
+	@PUT
+	@Path("nc")
+	public Response update_nc(NetConnection nc) {
+		if (nc == null)
+			throw new BadRequestException();
+		NetConnectionManager.update(nc);
+		URI uri = uriInfo.getAbsolutePathBuilder()
+				.path(String.valueOf(nc.getName()))
+				.build();
+		return Response.created(uri).build();
+	}
+	
+	/*
+	 * Delete a NC
+	 */
+	@DELETE
+	@Path("/nc/{name}")
+	public Response delete_nc(@PathParam("name") String name, @QueryParam("type") String type) {
+		NetConnection nc = NetConnectionManager.find(name);
+		if (nc == null) {
+			throw new NotFoundException();
+		}
+		NetConnectionManager.delete(name);
+		return Response.noContent().build();
+	}
+	
+	/*
+	 * ***************************************
+	 *  REST API for Consumption of VNF LCM
+	 *  **************************************
+	 */
+	@GET
+	@Path("nc/vnfc/{name}")
+	public Response find_vl_vnfc(@PathParam("name") String name, @QueryParam("type") String type) {
+		VirtualLink vl = NetConnectionManager.find_vl_from_vnfc(name);
+		if (vl == null)
+			throw new NotFoundException();
+		return Response
+				.ok(vl, "xml".equals(type) ? MediaType.APPLICATION_XML :MediaType.APPLICATION_JSON )
+				.build();
 	}
 	
 }

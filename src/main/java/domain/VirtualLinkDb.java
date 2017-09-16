@@ -26,6 +26,11 @@ public class VirtualLinkDb {
 	public void add(VirtualLink vl) {
 		try (Transaction tx = dbService.beginTx())	//create Neo4j transaction
 		{
+			// Delete any old node by same name if present already
+			Node node = dbService.findNode(Label.label("vldb"), "name", vl.getName());
+			if (node != null) {
+				node.delete();
+			}
 			Node node1 = dbService.createNode(Label.label("vldb"));	//create node in database
 			node1.setProperty("name", vl.getName());	// Sets Name
 			node1.setProperty("type", vl.getType());
