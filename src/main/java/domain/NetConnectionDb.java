@@ -22,7 +22,15 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 @XmlSeeAlso(NetConnection.class)
 public class NetConnectionDb {
 	GraphDatabaseFactory dbFactory = new GraphDatabaseFactory();
-	GraphDatabaseService dbService = dbFactory.newEmbeddedDatabaseBuilder(new File("data/neo4j.db")).newGraphDatabase();
+	static GraphDatabaseService dbService = null;
+	
+	public void init() {
+		dbService = dbFactory.newEmbeddedDatabaseBuilder(new File("data/neo4j.db")).newGraphDatabase();
+	}
+	
+	public void close() {
+		dbService.shutdown();
+	}
 	
 	public void add(NetConnection nc) {
 		try (Transaction tx = dbService.beginTx())	//create Neo4j transaction
@@ -112,7 +120,7 @@ public class NetConnectionDb {
 	public VirtualLink find_vl_from_vnfc(String vnfc_name) {
 		VirtualLink vl = new VirtualLink();
 		try (Transaction tx = dbService.beginTx()) {
-			Node node = dbService.findNode(Label.label("ncdb"), "name", vnfc_name);
+			Node node = dbService.findNode(Label.label("vnfcdb"), "name", vnfc_name);
 			Iterable<Relationship> allre = node.getRelationships(Direction.OUTGOING);
 			Node vlnode=null;
 			for (Relationship re: allre) {

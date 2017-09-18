@@ -21,8 +21,15 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 @XmlSeeAlso(VirtualLink.class)
 public class VirtualLinkDb {
 	GraphDatabaseFactory dbFactory = new GraphDatabaseFactory();
-	GraphDatabaseService dbService = dbFactory.newEmbeddedDatabaseBuilder(new File("data/neo4j.db")).newGraphDatabase();
+	static GraphDatabaseService dbService = null;
 	
+	public void init() {
+		dbService = dbFactory.newEmbeddedDatabaseBuilder(new File("data/neo4j.db")).newGraphDatabase();
+	}
+	
+	public void close() {
+		dbService.shutdown();
+	}
 	public void add(VirtualLink vl) {
 		try (Transaction tx = dbService.beginTx())	//create Neo4j transaction
 		{

@@ -6,7 +6,7 @@ public class ConnectionPointManager {
 	static {
 		Cpdb.init();
 		Cpdb.add(new ConnectionPoint("cp1", 0, 1, 2, 1));
-		//Cpdb.add(new ConnectionPoint("cp2", 0, 1, 2, 1));
+		Cpdb.add(new ConnectionPoint("cp2", 0, 1, 2, 1));
 		Cpdb.close();
 	}
 	
